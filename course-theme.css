@@ -1,0 +1,413 @@
+/* ============================================================
+   可视化导论 · 章节页共享主题（course-theme.css）
+   - 与门户统一的设计系统：Wong 配色（章节主题色）、Noto Sans SC + JetBrains Mono、
+     圆角/阴影/间距规范
+   - 只覆盖公共"页面骨架"类（header/nav/tabs/代码块/卡片等），
+     各章 demo 专用类（tree-svg / color-grid / quiz-card / attr-card / flow-svg 等）
+     完全保留在各自 styles.css 中，本文件不触碰
+   - 页面头部需引入：
+     <link rel="stylesheet" href="../course-theme.css">
+     <script>document.documentElement.dataset.ch = "N";</script>
+     （N 为章节号 1..5）
+   ============================================================ */
+
+@import url("https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap");
+
+/* ---------- 设计令牌 ---------- */
+:root {
+  --ch: #2563eb;          /* 默认主题色（缺省章节号时的回退） */
+  --ch-deep: #1d4ed8;
+  --ch-ink: #1e3a8a;
+  --ch-soft: #eff6ff;
+  --ch-glow: rgba(37, 99, 235, 0.14);
+  --bg: #f4f6f8;
+  --card: #ffffff;
+  --ink: #16181d;
+  --ink-2: #4c5562;
+  --ink-3: #7c8794;
+  --line: #e2e7ed;
+  --mono: "JetBrains Mono", "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+  --sans: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", "Source Han Sans SC", system-ui, -apple-system, sans-serif;
+  --shadow: 0 1px 2px rgba(16, 21, 28, 0.05), 0 10px 30px -12px rgba(16, 21, 28, 0.12);
+  --radius: 12px;
+}
+/* 第 1 章 数据 */
+html[data-ch="1"] { --ch: #E69F00; --ch-deep: #c47f00; --ch-ink: #7a5300; --ch-soft: #fdf3e0; --ch-glow: rgba(230, 159, 0, 0.16); }
+/* 第 2 章 数据可视化流程 */
+html[data-ch="2"] { --ch: #56B4E9; --ch-deep: #2f8ec7; --ch-ink: #1e5f8a; --ch-soft: #e8f5fd; --ch-glow: rgba(86, 180, 233, 0.16); }
+/* 第 3 章 色彩专题 */
+html[data-ch="3"] { --ch: #009E73; --ch-deep: #007a59; --ch-ink: #005c43; --ch-soft: #e5f7f1; --ch-glow: rgba(0, 158, 115, 0.15); }
+/* 第 4 章 低维可视化 */
+html[data-ch="4"] { --ch: #0072B2; --ch-deep: #005d94; --ch-ink: #004a75; --ch-soft: #e7f3fb; --ch-glow: rgba(0, 114, 178, 0.15); }
+/* 第 5 章 时序可视化 */
+html[data-ch="5"] { --ch: #D55E00; --ch-deep: #ad4c00; --ch-ink: #7c3600; --ch-soft: #fbecdf; --ch-glow: rgba(213, 94, 0, 0.15); }
+
+/* ---------- 基础排印 ---------- */
+body {
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--ink);
+  background: var(--bg);
+}
+code, pre, .kbd, .console {
+  font-family: var(--mono);
+}
+
+/* ---------- 顶部全局导航 ---------- */
+.course-topbar {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 1px 6px rgba(16, 21, 28, 0.06);
+  padding: 9px 20px;
+}
+.course-topbar .brand {
+  color: var(--ch-deep);
+  background: var(--ch-soft);
+  border: 1px solid transparent;
+}
+.course-topbar .brand:hover {
+  background: var(--ch);
+  color: #fff;
+}
+.course-topbar ul.tabs a { color: var(--ink-2); border-radius: 7px; }
+.course-topbar ul.tabs a:hover { background: var(--ch-soft); color: var(--ch-ink); }
+.course-topbar ul.tabs a.current {
+  background: var(--ch);
+  color: #fff;
+}
+.course-topbar ul.tabs a.current:hover { background: var(--ch-deep); color: #fff; }
+
+/* ---------- 章节页头 ---------- */
+.lesson-header {
+  background:
+    radial-gradient(900px 260px at 88% -30%, var(--ch-glow), transparent 62%),
+    linear-gradient(135deg, #1e293b, #0f172a 78%);
+  border-bottom: 3px solid var(--ch);
+  padding: 26px 32px;
+}
+.lesson-header h1 {
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.lesson-header h1::before {
+  content: "";
+  width: 9px;
+  height: 1.05em;
+  border-radius: 3px;
+  background: var(--ch);
+  box-shadow: 0 0 14px var(--ch-glow);
+  flex: none;
+}
+.subtitle { color: #9fb0c3; font-size: 13.5px; margin-top: 5px; }
+.header-tip { color: #9fb0c3; font-size: 12.5px; }
+.header-tip .kbd {
+  background: #2b3a52;
+  border: 1px solid #3d4f6b;
+  color: #e8eef6;
+  border-radius: 5px;
+  padding: 2px 8px;
+  font-size: 11px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset;
+}
+
+/* ---------- 章节学习路径条（course-theme.js 注入） ---------- */
+.ch-stepper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 12px 32px;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+}
+.ch-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 13px 5px 6px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+  font-size: 13px;
+  text-decoration: none;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.ch-step .ch-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--ch-soft);
+  color: var(--ch-deep);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  flex: none;
+}
+.ch-step:hover { border-color: var(--ch); color: var(--ch-deep); }
+.ch-step.active {
+  background: var(--ch);
+  border-color: var(--ch);
+  color: #fff;
+}
+.ch-step.active .ch-step-num { background: rgba(255, 255, 255, 0.24); color: #fff; }
+
+/* ---------- 主体双栏 ---------- */
+.lesson-main {
+  grid-template-columns: 224px 1fr;
+  gap: 22px;
+  padding: 22px 32px 40px;
+}
+
+/* ---------- 左侧小节导航 ---------- */
+.chapter-nav {
+  top: 18px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px 14px;
+}
+.chapter-nav h3 {
+  color: var(--ink-3);
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  padding: 0 8px;
+}
+.chapter-nav li { margin: 3px 0; }
+.chapter-nav a {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border-left: 3px solid transparent;
+  color: var(--ink-2);
+  font-size: 13.5px;
+}
+.chapter-nav a:hover { background: #f3f6f9; color: var(--ink); }
+.chapter-nav a.active {
+  background: var(--ch-soft);
+  color: var(--ch-deep);
+  border-left-color: var(--ch);
+  font-weight: 600;
+}
+.nav-tip { border-top: 1px solid var(--line); margin-top: 14px; padding-top: 12px; }
+.nav-tip a { color: var(--ch-deep); }
+.nav-tip a:hover { color: var(--ch-ink); text-decoration: underline; }
+
+/* ---------- 章节内容卡片 ---------- */
+.chapter-content {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.chapter { padding: 30px 38px 38px; }
+.chapter h2 {
+  font-size: 22px;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.chapter h2::before {
+  content: "";
+  width: 5px;
+  height: 1.1em;
+  border-radius: 3px;
+  background: var(--ch);
+  flex: none;
+}
+.chapter-subtitle { color: var(--ink-3); font-size: 13.5px; margin-bottom: 22px; }
+
+/* ---------- Tab 切换 ---------- */
+.tabs { border-bottom: 2px solid var(--line); margin-bottom: 26px; }
+.tab-btn {
+  color: var(--ink-3);
+  font-size: 13.5px;
+  padding: 11px 18px;
+  border-bottom: 2px solid transparent;
+}
+.tab-btn:hover { color: var(--ink); background: #f6f8fa; }
+.tab-btn.active { color: var(--ch-deep); border-bottom-color: var(--ch); font-weight: 600; }
+
+/* ---------- 讲解区 ---------- */
+.tab-panel h3 { font-size: 16px; color: #0f172a; margin: 22px 0 10px; }
+.tab-panel p { color: var(--ink-2); margin: 9px 0; }
+.tab-panel li { color: var(--ink-2); }
+.tab-panel code {
+  background: #1e293b;
+  color: #eef3f9;
+  border: 1px solid #334155;
+  border-radius: 5px;
+  padding: 2px 7px;
+  font-size: 12.5px;
+}
+.note {
+  border-radius: 0 8px 8px 0;
+  font-size: 13.5px;
+}
+.theory-table th { background: #f6f8fa; color: var(--ink-2); }
+.theory-table th, .theory-table td { border-color: var(--line); }
+
+/* ---------- 代码区 ---------- */
+pre {
+  background: #0f172a;
+  color: #e2e8f0;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  padding: 15px 18px;
+  font-size: 13px;
+  line-height: 1.75;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+pre::-webkit-scrollbar { height: 8px; width: 8px; }
+pre::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+pre::-webkit-scrollbar-track { background: transparent; }
+.code-purpose { color: var(--ink-2); border-left-color: var(--line); }
+
+/* ---------- 关键点 / 演示区（章节主题色） ---------- */
+.key-point {
+  background: var(--ch-soft);
+  border-left: 3px solid var(--ch);
+  color: var(--ink);
+  border-radius: 0 8px 8px 0;
+  font-size: 13.5px;
+}
+.key-point strong { color: var(--ch-deep); }
+.demo-hint {
+  background: var(--ch-soft);
+  color: var(--ch-deep);
+  border-radius: 8px;
+  font-size: 13.5px;
+}
+.demo-mount {
+  background: #f7f9fb;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 18px;
+}
+.demo-sub, .demo-detail {
+  border-color: var(--line);
+  border-radius: 10px;
+}
+.demo-sub h4 { color: var(--ink); }
+.demo-btn {
+  background: var(--ch);
+  border-radius: 6px;
+  font-size: 13px;
+  padding: 7px 16px;
+}
+.demo-btn:hover { background: var(--ch-deep); }
+.console {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+}
+.demo-legend { color: var(--ink-3); }
+
+/* ---------- 章节翻页导航 ---------- */
+.chapter-pager a, .chapter-pager span {
+  border-radius: 10px;
+  border-color: var(--line);
+}
+.chapter-pager a:hover {
+  border-color: var(--ch);
+  background: var(--ch-soft);
+}
+.chapter-pager a:hover .pager-title { color: var(--ch-deep); }
+.chapter-pager .pager-portal {
+  background: var(--ch-soft);
+  color: var(--ch-deep);
+}
+.chapter-pager .pager-portal:hover {
+  background: var(--ch);
+  color: #fff;
+}
+.chapter-pager .pager-title { color: #0f172a; }
+
+/* ---------- 页脚 / 返回顶部 / 阅读进度 ---------- */
+.lesson-footer { color: var(--ink-3); }
+#toTopBtn {
+  position: fixed;
+  right: 22px;
+  bottom: 24px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ch-deep);
+  font-size: 18px;
+  font-weight: 700;
+  font-family: var(--sans);
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: all 0.2s;
+  z-index: 400;
+}
+#toTopBtn.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+#toTopBtn:hover { background: var(--ch); color: #fff; border-color: var(--ch); }
+#readProgress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background: linear-gradient(90deg, var(--ch), var(--ch-deep));
+  z-index: 500;
+  box-shadow: 0 0 8px var(--ch-glow);
+}
+
+/* ---------- 可访问性 ---------- */
+a:focus-visible, button:focus-visible, .ch-step:focus-visible {
+  outline: 2px solid var(--ch);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 900px) {
+  .lesson-main { grid-template-columns: 1fr; padding: 18px 16px 32px; }
+  .chapter-nav {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    box-shadow: none;
+    padding: 12px;
+  }
+  .chapter-nav h3 { flex-basis: 100%; margin-bottom: 4px; }
+  .chapter-nav ul { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chapter-nav li { margin: 0; }
+  .chapter-nav a { border-left: none; border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; font-size: 13px; }
+  .chapter-nav a.active { border-color: var(--ch); }
+  .nav-tip { flex-basis: 100%; }
+  .ch-stepper { padding: 10px 16px; }
+  .lesson-header { padding: 20px 16px; }
+  .chapter { padding: 24px 20px 30px; }
+}
+@media (max-width: 640px) {
+  body { font-size: 14.5px; }
+  .lesson-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .lesson-header h1 { font-size: 20px; }
+  .tab-btn { padding: 9px 12px; font-size: 13px; }
+  .chapter h2 { font-size: 19px; }
+  .course-topbar { padding: 8px 12px; }
+  .course-topbar ul.tabs a { padding: 5px 9px; font-size: 12.5px; }
+}
